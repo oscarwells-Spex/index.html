@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shipment Entry</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 550px;
+            width: 100%;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            color: white;
+            padding: 32px 36px;
+        }
+
+        .header h1 {
+            font-size: 26px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+
+        .form-content {
+            padding: 36px;
+        }
+
+        .form-group {
+            margin-bottom: 26px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 8px;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+        }
+
+        label .optional {
+            color: #9ca3af;
+            font-weight: 400;
+            text-transform: none;
+            font-size: 12px;
+        }
+
+        label .required {
+            color: #dc2626;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 15px;
+            font-family: inherit;
+            transition: all 0.15s ease;
+            background: white;
+        }
+
+        input:hover, select:hover, textarea:hover {
+            border-color: #d1d5db;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #dc2626;
+            box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.08);
+        }
+
+        select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M10.293 3.293L6 7.586 1.707 3.293A1 1 0 00.293 4.707l5 5a1 1 0 001.414 0l5-5a1 1 0 10-1.414-1.414z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            padding-right: 42px;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 160px;
+            font-family: 'SF Mono', 'Consolas', 'Monaco', 'Courier New', monospace;
+            line-height: 1.7;
+            font-size: 14px;
+        }
+
+        .po-help {
+            font-size: 13px;
+            color: #374151;
+            margin-bottom: 10px;
+            padding: 14px 16px;
+            background: #fef2f2;
+            border-radius: 8px;
+            border-left: 4px solid #dc2626;
+            line-height: 1.6;
+        }
+
+        .po-help code {
+            background: #fee2e2;
+            padding: 3px 7px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-family: 'SF Mono', 'Consolas', 'Monaco', 'Courier New', monospace;
+            color: #991b1b;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 4px rgba(220, 38, 38, 0.2);
+        }
+
+        .submit-btn:hover {
+            background: linear-gradient(135deg, #b91c1c 0%, #991b1b 100%);
+            box-shadow: 0 4px 8px rgba(220, 38, 38, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .message {
+            padding: 14px 18px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            display: none;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .message.success {
+            background: #dcfce7;
+            color: #166534;
+            border: 2px solid #86efac;
+        }
+
+        .message.error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 2px solid #fca5a5;
+        }
+
+        @media (max-width: 640px) {
+            body {
+                padding: 0;
+                align-items: flex-start;
+            }
+
+            .container {
+                border-radius: 0;
+                box-shadow: none;
+                min-height: 100vh;
+            }
+
+            .form-content {
+                padding: 28px 24px;
+            }
+
+            .header {
+                padding: 28px 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>New Shipment Entry</h1>
+        </div>
+
+        <div class="form-content">
+            <div id="message" class="message"></div>
+
+            <form id="shipmentForm">
+                <div class="form-group">
+                    <label for="shipment">
+                        Shipment ID / FedEx Number <span class="required">*</span>
+                    </label>
+                    <input type="text" id="shipment" name="shipment" required 
+                           placeholder="LJ-021025-SF / 8887 9399 2447">
+                </div>
+
+                <div class="form-group">
+                    <label for="mode">
+                        Mode <span class="required">*</span>
+                    </label>
+                    <select id="mode" name="mode" required>
+                        <option value="">Select shipping mode</option>
+                        <option value="Ocean">Ocean</option>
+                        <option value="Air">Air</option>
+                        <option value="FedEx">FedEx</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="supplier_ref">
+                        Supplier Reference <span class="optional">(optional)</span>
+                    </label>
+                    <input type="text" id="supplier_ref" name="supplier_ref" 
+                           placeholder="Enter supplier reference">
+                </div>
+
+                <div class="form-group">
+                    <label for="purchase_orders">
+                        Purchase Orders <span class="required">*</span>
+                    </label>
+                    
+                    <div class="po-help">
+                        Enter PO numbers separated by commas, spaces, or line breaks<br>
+                        Example: <code>P76741, P76742</code> or one per line
+                    </div>
+
+                    <textarea id="purchase_orders" name="purchase_orders" required
+                              placeholder="P76741&#10;P76742&#10;P76912&#10;P77124"></textarea>
+                </div>
+
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    Submit Shipment
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const WEBHOOK_URL = 'https://spexoscar.app.n8n.cloud/webhook/85f921cc-4612-43a1-bf7f-f0e9b06df722';
+
+        // Form submission handler
+        document.getElementById('shipmentForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting...';
+
+            try {
+                // Collect form data
+                const formData = {
+                    shipment: document.getElementById('shipment').value.trim(),
+                    mode: document.getElementById('mode').value,
+                    supplier_ref: document.getElementById('supplier_ref').value.trim() || null,
+                    purchase_orders: []
+                };
+
+                // Parse PO numbers from textarea (split by comma, space, newline, or combination)
+                const poText = document.getElementById('purchase_orders').value;
+                const poArray = poText
+                    .split(/[\s,\n\r]+/) // Split by spaces, commas, newlines, or combination
+                    .map(po => po.trim()) // Trim whitespace
+                    .filter(po => po.length > 0); // Remove empty strings
+
+                formData.purchase_orders = poArray;
+
+                // Validate we have at least one PO
+                if (formData.purchase_orders.length === 0) {
+                    throw new Error('Please enter at least one purchase order number');
+                }
+
+                console.log('Submitting data:', formData);
+                console.log(`Found ${formData.purchase_orders.length} purchase orders`);
+
+                // Send to webhook
+                const response = await fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                console.log('Success:', result);
+
+                showMessage(`Shipment created successfully with ${formData.purchase_orders.length} PO(s)`, 'success');
+                
+                // Reset form after 2 seconds
+                setTimeout(() => {
+                    document.getElementById('shipmentForm').reset();
+                }, 2000);
+
+            } catch (error) {
+                console.error('Error:', error);
+                showMessage(`Error: ${error.message}`, 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Submit Shipment';
+            }
+        });
+
+        // Show message function
+        function showMessage(text, type) {
+            const messageEl = document.getElementById('message');
+            messageEl.textContent = text;
+            messageEl.className = `message ${type}`;
+            messageEl.style.display = 'block';
+
+            setTimeout(() => {
+                messageEl.style.display = 'none';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
